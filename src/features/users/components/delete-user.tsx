@@ -26,21 +26,21 @@ export const DeleteUser = ({ id }: DeleteUserProps) => {
   if (user.data?.id === id) return null;
 
   return (
-    <ConfirmationDialog
-      icon="danger"
-      title="Delete User"
-      body="Are you sure you want to delete this user?"
-      triggerButton={<Button variant="destructive">Delete</Button>}
-      confirmButton={
-        <Button
-          isLoading={deleteUserMutation.isPending}
-          type="button"
-          variant="destructive"
-          onClick={() => deleteUserMutation.mutate({ userId: id })}
-        >
-          Delete User
-        </Button>
-      }
-    />
+      <ConfirmationDialog
+          icon="danger"
+          title="Delete User"
+          body="Are you sure you want to delete this user?"
+          triggerButton={<Button variant="destructive">Delete</Button>}
+          confirmButton={
+            <Button
+                isLoading={deleteUserMutation.isPending}
+                type="button"
+                variant="destructive"
+                onClick={() => deleteUserMutation.mutate({ userId: id })}
+            >
+              Delete User
+            </Button>
+          }
+      />
   );
 };

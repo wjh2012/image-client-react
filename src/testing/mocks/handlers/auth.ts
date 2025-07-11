@@ -1,16 +1,16 @@
-import Cookies from "js-cookie";
-import { HttpResponse, http } from "msw";
+import Cookies from 'js-cookie';
+import { HttpResponse, http } from 'msw';
 
-import { env } from "@/config/env";
+import { env } from '@/config/env';
 
-import { db, persistDb } from "../db";
+import { db, persistDb } from '../db';
 import {
   authenticate,
   hash,
   requireAuth,
   AUTH_COOKIE,
   networkDelay,
-} from "../utils";
+} from '../utils';
 
 type RegisterBody = {
   firstName: string;
@@ -42,7 +42,7 @@ export const authHandlers = [
 
       if (existingUser) {
         return HttpResponse.json(
-          { message: "The user already exists" },
+          { message: 'The user already exists' },
           { status: 400 },
         );
       }
@@ -54,9 +54,9 @@ export const authHandlers = [
         const team = db.team.create({
           name: userObject.teamName ?? `${userObject.firstName} Team`,
         });
-        await persistDb("team");
+        await persistDb('team');
         teamId = team.id;
-        role = "ADMIN";
+        role = 'ADMIN';
       } else {
         const existingTeam = db.team.findFirst({
           where: {
@@ -69,13 +69,13 @@ export const authHandlers = [
         if (!existingTeam) {
           return HttpResponse.json(
             {
-              message: "The team you are trying to join does not exist!",
+              message: 'The team you are trying to join does not exist!',
             },
             { status: 400 },
           );
         }
         teamId = userObject.teamId;
-        role = "USER";
+        role = 'USER';
       }
 
       db.user.create({
@@ -85,7 +85,7 @@ export const authHandlers = [
         teamId,
       });
 
-      await persistDb("user");
+      await persistDb('user');
 
       const result = authenticate({
         email: userObject.email,
@@ -93,17 +93,17 @@ export const authHandlers = [
       });
 
       // todo: remove once tests in Github Actions are fixed
-      Cookies.set(AUTH_COOKIE, result.jwt, { path: "/" });
+      Cookies.set(AUTH_COOKIE, result.jwt, { path: '/' });
 
       return HttpResponse.json(result, {
         headers: {
           // with a real API servier, the token cookie should also be Secure and HttpOnly
-          "Set-Cookie": `${AUTH_COOKIE}=${result.jwt}; Path=/;`,
+          'Set-Cookie': `${AUTH_COOKIE}=${result.jwt}; Path=/;`,
         },
       });
     } catch (error: any) {
       return HttpResponse.json(
-        { message: error?.message || "Server Error" },
+        { message: error?.message || 'Server Error' },
         { status: 500 },
       );
     }
@@ -117,17 +117,17 @@ export const authHandlers = [
       const result = authenticate(credentials);
 
       // todo: remove once tests in Github Actions are fixed
-      Cookies.set(AUTH_COOKIE, result.jwt, { path: "/" });
+      Cookies.set(AUTH_COOKIE, result.jwt, { path: '/' });
 
       return HttpResponse.json(result, {
         headers: {
           // with a real API servier, the token cookie should also be Secure and HttpOnly
-          "Set-Cookie": `${AUTH_COOKIE}=${result.jwt}; Path=/;`,
+          'Set-Cookie': `${AUTH_COOKIE}=${result.jwt}; Path=/;`,
         },
       });
     } catch (error: any) {
       return HttpResponse.json(
-        { message: error?.message || "Server Error" },
+        { message: error?.message || 'Server Error' },
         { status: 500 },
       );
     }
@@ -140,10 +140,10 @@ export const authHandlers = [
     Cookies.remove(AUTH_COOKIE);
 
     return HttpResponse.json(
-      { message: "Logged out" },
+      { message: 'Logged out' },
       {
         headers: {
-          "Set-Cookie": `${AUTH_COOKIE}=; Path=/;`,
+          'Set-Cookie': `${AUTH_COOKIE}=; Path=/;`,
         },
       },
     );
@@ -157,7 +157,7 @@ export const authHandlers = [
       return HttpResponse.json({ data: user });
     } catch (error: any) {
       return HttpResponse.json(
-        { message: error?.message || "Server Error" },
+        { message: error?.message || 'Server Error' },
         { status: 500 },
       );
     }

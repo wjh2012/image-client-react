@@ -1,9 +1,9 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { api } from '@/lib/api-client';
-import { MutationConfig } from '@/lib/react-query';
+import { api } from "@/lib/api-client";
+import type { MutationConfig } from "@/lib/react-query";
 
-import { getUsersQueryOptions } from './get-users';
+import { getUsersQueryOptions } from "./get-users";
 
 export type DeleteUserDTO = {
   userId: string;
